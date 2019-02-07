@@ -22,6 +22,14 @@ class Input:
     def getInput(self):
         return input()
 
+class Player:
+    def __init__(self, char, controller):
+        self.char = char
+        self.controller = controller
+
+    def getMove(self):
+        return self.controller.getInput()
+
 def isValid(inp, board):
     try:
         inp = int(inp)
@@ -57,29 +65,32 @@ def play():
     b_gameover = False
     board_display = ConsoleBoardDisplay()
     board = Board(board_display)
-    game_input = Input()
-    curplayer = 'X'
+    player1_input = Input()
+    player2_input = Input()
+    player1 = Player('X', player1_input)
+    player2 = Player('O', player2_input)
+    curplayer = player1
 
     os.system('clear')       
     board.display()
 
     while not b_gameover:
         print("Enter a number 1-9: ", end='')
-        s = game_input.getInput()
+        s = curplayer.controller.getInput()
         b_valid = isValid(s, board)
 
         while not b_valid:
             print("Invalid choice")
             print("Enter a number 1-9: ", end='')
-            s = game_input.getInput()
+            s = curplayer.controller.getInput()
             b_valid = isValid(s, board)
 
-        board.spaces[int(s)-1] = curplayer
+        board.spaces[int(s)-1] = curplayer.char
 
-        if curplayer == 'X':
-            curplayer = 'O'
+        if curplayer is player1:
+            curplayer = player2
         else:
-            curplayer = 'X'
+            curplayer = player1
 
         os.system('clear')       
         board.display()
